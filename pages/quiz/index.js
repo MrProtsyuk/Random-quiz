@@ -23,6 +23,7 @@ function Quizpageid({ results, number }) {
   const [showColor, setShowColor] = useState(false);
   const [questions, setQuestions] = useState([]);
   const [tally, setTally] = useState(0);
+  const [timer, setTimer] = useState(20)
 
   const quiz = results[questionIndex];
 
@@ -67,6 +68,7 @@ function Quizpageid({ results, number }) {
                       flexDirection: 'row',
                       justifyContent: 'space-between', 
                       padding: 20}}>
+          <h2>Timer: {timer}</h2>
           <h2>Question: {questionIndex + 1}</h2>
           <h2>Category - {he.decode(quiz.category)}</h2>
           <h2>

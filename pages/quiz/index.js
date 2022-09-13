@@ -3,6 +3,7 @@ import { shuffle } from "../../utils/shuffleArray";
 import he from "he";
 import { encodeGetParams } from "../../utils/queryString";
 import { useRouter } from "next/router";
+import OptionBtn from "../../components/OptionBtn";
 
 export const getServerSideProps = async (ctx) => {
   console.log(ctx.query);
@@ -23,9 +24,21 @@ function Quizpageid({ results, number }) {
   const [showColor, setShowColor] = useState(false);
   const [questions, setQuestions] = useState([]);
   const [tally, setTally] = useState(0);
-  const [timer, setTimer] = useState(20)
+  const [timer, setTimer] = useState(10);
 
   const quiz = results[questionIndex];
+
+  const tick = () => {
+    setTimer((t) => {
+      const newTime = t - 1;
+      if (newTime <= 0) {
+        setShowColor(true);
+        setMessage("You ran out of time");
+        return 0;
+      }
+      return newTime;
+    });
+  };
 
   const checkAnswer = (question) => {
     if (showColor) return;
@@ -47,27 +60,37 @@ function Quizpageid({ results, number }) {
     setShowColor(false);
     setMessage("");
     setQuestion((questionIndex) => questionIndex + 1);
+    setTimer(10);
   };
 
   const router = useRouter();
   const submit = (e) => {
     e.preventDefault();
     router.push({
-      pathname: "/"
-    })
-  }
+      pathname: "/",
+    });
+  };
+
+  useEffect(() => {
+    const timerId = setInterval(() => tick(), 1000);
+    return () => clearInterval(timerId);
+  });
 
   useEffect(() => {
     setQuestions(shuffle([...quiz.incorrect_answers, quiz.correct_answer]));
   }, [questionIndex]);
 
   return (
-    <div>
+    <div className="bg-lime-100 min-h-screen">
       <div style={{ marginBottom: 50 }}>
-        <div style={{ display: 'flex',
-                      flexDirection: 'row',
-                      justifyContent: 'space-between', 
-                      padding: 20}}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            padding: 20,
+          }}
+        >
           <h2>Timer: {timer}</h2>
           <h2>Question: {questionIndex + 1}</h2>
           <h2>Category - {he.decode(quiz.category)}</h2>
@@ -75,40 +98,25 @@ function Quizpageid({ results, number }) {
             Score: {tally} / {number}
           </h2>
         </div>
-          <h2 style={{ textAlign: 'center'}}>{he.decode(quiz.question)}</h2>
-        <h2 style={{ textAlign: 'center'}}>{message}</h2>
+        <h2 style={{ textAlign: "center", padding: 20 }}>
+          {he.decode(quiz.question)}
+        </h2>
+        <h2 style={{ textAlign: "center" }}>{message}</h2>
         <hr />
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
+        <div className="flex flex-col mt-4 p-3 items-center"
         >
           {questions.map((question) => (
-            <button
-              style={{
-                marginBottom: 10,
-                border: showColor
-                  ? question === quiz.correct_answer
-                    ? "green 4px solid"
-                    : "red 4px solid"
-                  : "",
-                backgroundColor: "white",
-                color: "black",
-                padding: 20,
-                fontSize: 24,
-                width: 400,
-              }}
+            <OptionBtn
               onClick={() => checkAnswer(question)}
-            >
-              {he.decode(question)}
-            </button>
+              correct={question === quiz.correct_answer}
+              showColor={showColor}
+              question={question}
+            />
           ))}
           {questionIndex === results.length - 1 ? (
             showColor && <button onClick={(e) => submit(e)}>Return home</button>
           ) : (
-            <button onClick={() => nextQuestion()}>Next</button>
+            <button className="btn btn-lg btn-primary btn-block p-2 px-4 mx-4 bg-white border-solid border-black border rounded hover:bg-stone-50 hover:text-sky-500"onClick={() => nextQuestion()}>Next</button>
           )}
         </div>
       </div>

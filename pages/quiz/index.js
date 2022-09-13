@@ -96,6 +96,7 @@ function Quizpageid({ results, number }) {
         <div className="flex flex-col mt-4 p-3 items-center min-h-full">
           {questions.map((question) => (
             <OptionBtn
+              key={question}
               onClick={() => checkAnswer(question)}
               correct={question === quiz.correct_answer}
               showColor={showColor}

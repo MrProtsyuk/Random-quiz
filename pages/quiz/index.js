@@ -4,6 +4,7 @@ import he from "he";
 import { encodeGetParams } from "../../utils/queryString";
 import { useRouter } from "next/router";
 import OptionBtn from "../../components/OptionBtn";
+import QuestionInfo from "../../components/QuestionInfo";
 
 export const getServerSideProps = async (ctx) => {
   console.log(ctx.query);
@@ -82,29 +83,17 @@ function Quizpageid({ results, number }) {
 
   return (
     <div className="bg-lime-100 min-h-screen">
-      <div style={{ marginBottom: 50 }}>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-between",
-            padding: 20,
-          }}
-        >
-          <h2>Timer: {timer}</h2>
-          <h2>Question: {questionIndex + 1}</h2>
-          <h2>Category - {he.decode(quiz.category)}</h2>
-          <h2>
-            Score: {tally} / {number}
-          </h2>
-        </div>
-        <h2 style={{ textAlign: "center", padding: 20 }}>
-          {he.decode(quiz.question)}
-        </h2>
-        <h2 style={{ textAlign: "center" }}>{message}</h2>
+      <div>
+        <QuestionInfo
+          timer={timer}
+          questionIndex={questionIndex}
+          quiz={quiz}
+          message={message}
+          tally={tally}
+          number={number}
+        />
         <hr />
-        <div className="flex flex-col mt-4 p-3 items-center"
-        >
+        <div className="flex flex-col mt-4 p-3 items-center min-h-full">
           {questions.map((question) => (
             <OptionBtn
               onClick={() => checkAnswer(question)}
@@ -114,9 +103,21 @@ function Quizpageid({ results, number }) {
             />
           ))}
           {questionIndex === results.length - 1 ? (
-            showColor && <button onClick={(e) => submit(e)}>Return home</button>
+            showColor && (
+              <button
+                className="btn btn-lg btn-primary btn-block p-2 px-4 mx-4 bg-white border-solid border-black border rounded hover:bg-stone-50 hover:text-sky-500"
+                onClick={(e) => submit(e)}
+              >
+                Return home
+              </button>
+            )
           ) : (
-            <button className="btn btn-lg btn-primary btn-block p-2 px-4 mx-4 bg-white border-solid border-black border rounded hover:bg-stone-50 hover:text-sky-500"onClick={() => nextQuestion()}>Next</button>
+            <button
+              className="btn btn-lg btn-primary btn-block p-2 px-4 mx-4 bg-white border-solid border-black border rounded hover:bg-stone-50 hover:text-sky-500"
+              onClick={() => nextQuestion()}
+            >
+              Next
+            </button>
           )}
         </div>
       </div>

@@ -92,7 +92,7 @@ function Home() {
           </label>
           <select
             name="difficulty"
-            className="form-control p-3 text-center border-solid border-black border rounded"
+            className="form-control ml-0.5 p-3 px-28 text-center border-solid border-black border rounded"
           >
             <option value="any">Any Difficulty</option>
             <option value="easy">Easy</option>
@@ -108,10 +108,10 @@ function Home() {
           </label>
           <select
             name="type"
-            className="form-control p-3 text-center border-solid border-black border rounded"
+            className="form-control p-3 ml-5 px-24 text-center border-solid border-black border rounded"
           >
             &gt;
-            <option value="any" className="mr-4 ">
+            <option value="any" className="mr-4">
               Any Type
             </option>
             <option value="multiple">Multiple Choice</option>

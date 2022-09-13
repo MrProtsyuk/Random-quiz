@@ -1,5 +1,10 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+### Random Quiz, Quiz!
+
+Hey, thanks for checking this little repo I made! This project uses Next.js along with a quiz API I found to make a little quiz page.
+I deployed it on vercel here -> https://random-quiz-nine.vercel.app/
+
 ## Getting Started
 
 First, run the development server:
